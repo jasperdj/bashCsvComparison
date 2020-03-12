@@ -66,9 +66,29 @@
 ./input/primary/1.csv;2;;-1000;./input/secundary/1.csv;2;per;10<br>
 ;;;;./input/secundary/1.csv;3;jasper;100</p>
 <h3 id="step-2-determine-type-of-each-column-string-or-number">Step 2: determine type of each column (string or number)</h3>
-<p>file;ID;string;number;file;ID;string;number;type_ID;type_string;type_number<br>
+<p>file;ID;string;number;file;ID;string;number;ID_type;string_type;number_type<br>
 ./input/primary/1.csv;1;jas;-1;./input/secundary/1.csv;1;jas;1;number;string;number<br>
 ./input/primary/1.csv;2;;-1000;./input/secundary/1.csv;2;per;10;number;string;number<br>
 ;;;;./input/secundary/1.csv;3;jasper;100;number;string;number</p>
-<h3 id="step-3">step 3</h3>
+<h3 id="step-3-string-and-integer-comparison">step 3: string and integer comparison</h3>
+<p><em>Pseudo code for formulas of new columns based on type of column</em></p>
+<ul>
+<li>left_string_comparison = str_replace(string_right, string_left )</li>
+<li>right_string_comparison = str_replace(string_left, string_right )</li>
+<li>absolute_difference = abs(left_number -right_number)</li>
+<li>relative difference= absolute_difference / abs(left_number)</li>
+</ul>
+<p>file;ID;string;number;file;ID;string;number;ID_type;string_type;number_type;ID_abs_diff;ID_rel_diff;string_left_diff;string_right_diff;number_abs_diff;number_rel_diff<br>
+./input/primary/1.csv;1;jas;-1;./input/secundary/1.csv;1;jas;1;number;string;number;0;0;;;2;2<br>
+./input/primary/1.csv;2;;-1000;./input/secundary/1.csv;2;per;10;number;string;number;0;0;per;;1010;1.01<br>
+;;;;./input/secundary/1.csv;3;jasper;100;number;string;number;NaN;NaN;jasper;;NaN;NaN</p>
+<h3 id="step-4-add-boolean-whether-column-matches-based-on-shell-arguments">Step 4: add boolean whether column matches (based on shell arguments)</h3>
+<p>In this step we add a new column for each column called _matches, being a conclusive boolean field that indicates whether two fields match or not based on criteria given in shell arguments.</p>
+<p>Shell argument include threshold for every column, with default as follows<br>
+string_max_different_characters=0<br>
+number_max_abs_diff=0<br>
+number_max_abs_diff=0</p>
+<p>Shell argument would look like “$COLUMNNAME_string_max_different_characters”</p>
+<p>For the given shell arguments, the output would look as follows.</p>
+<p>(Soon)</p>
 
