@@ -46,19 +46,15 @@
 2;per;10<br>
 3;jasper;100</p>
 <h2 id="brief-summary">Brief summary</h2>
-<p>Problem: I need to compare csv files with the same name in different directories on column based level.</p>
-<p>Assumption we can make about the csv files:</p>
+<p><strong>Problem</strong>: I need to compare csv files with the same name in different directories on column based level.</p>
+<p><strong>Assumption</strong> we can make about the csv files:</p>
 <ol>
 <li>they contain the same unqique columns</li>
 <li>are valid csv format</li>
 <li>all have the same delimiter</li>
 <li>may not have the same amount of rows.</li>
 </ol>
-<p>Required outcome:</p>
-<ol>
-<li>For each combination of csv files with the same name I need to generate a conclusive file in ./output/ that contains all csv columns from both csv files.</li>
-<li>For each column combination we need to determine whether the value is a number</li>
-</ol>
+<p><strong>Required outcome</strong>: see example of output file below</p>
 <h2 id="example-of-the-output-file-output1.csv-in-steps">Example of the output file output/1.csv in steps</h2>
 <h3 id="step-1-horizonally-concatenation-of-files">Step 1: horizonally concatenation of files</h3>
 <p>file;ID;string;number;file;ID;string;number<br>
@@ -66,10 +62,10 @@
 ./input/primary/1.csv;2;;-1000;./input/secundary/1.csv;2;per;10<br>
 ;;;;./input/secundary/1.csv;3;jasper;100</p>
 <h3 id="step-2-determine-type-of-each-column-string-or-number">Step 2: determine type of each column (string or number)</h3>
-<p>file;ID;string;number;file;ID;string;number;ID_type;string_type;number_type<br>
-./input/primary/1.csv;1;jas;-1;./input/secundary/1.csv;1;jas;1;number;string;number<br>
-./input/primary/1.csv;2;;-1000;./input/secundary/1.csv;2;per;10;number;string;number<br>
-;;;;./input/secundary/1.csv;3;jasper;100;number;string;number</p>
+<p>file;ID;string;number;file;ID;string;number;<strong>ID_type;string_type;number_type</strong><br>
+./input/primary/1.csv;1;jas;-1;./input/secundary/1.csv;1;jas;1;<strong>number;string;number</strong><br>
+./input/primary/1.csv;2;;-1000;./input/secundary/1.csv;2;per;10;<strong>number;string;number</strong><br>
+;;;;./input/secundary/1.csv;3;jasper;100;<strong>number;string;number</strong></p>
 <h3 id="step-3-string-and-integer-comparison">step 3: string and integer comparison</h3>
 <p><em>Pseudo code for formulas of new columns based on type of column</em></p>
 <ul>
@@ -78,10 +74,10 @@
 <li>absolute_difference = abs(left_number -right_number)</li>
 <li>relative difference= absolute_difference / abs(left_number)</li>
 </ul>
-<p>file;ID;string;number;file;ID;string;number;ID_type;string_type;number_type;ID_abs_diff;ID_rel_diff;string_left_diff;string_right_diff;number_abs_diff;number_rel_diff<br>
-./input/primary/1.csv;1;jas;-1;./input/secundary/1.csv;1;jas;1;number;string;number;0;0;;;2;2<br>
-./input/primary/1.csv;2;;-1000;./input/secundary/1.csv;2;per;10;number;string;number;0;0;per;;1010;1.01<br>
-;;;;./input/secundary/1.csv;3;jasper;100;number;string;number;NaN;NaN;jasper;;NaN;NaN</p>
+<p>file;ID;string;number;file;ID;string;number;ID_type;string_type;number_type;<strong>ID_abs_diff;ID_rel_diff;string_left_diff;string_right_diff;number_abs_diff;number_rel_diff</strong><br>
+./input/primary/1.csv;1;jas;-1;./input/secundary/1.csv;1;jas;1;number;string;number;<strong>0;0;;;2;2</strong><br>
+./input/primary/1.csv;2;;-1000;./input/secundary/1.csv;2;per;10;number;string;number;<strong>0;0;per;;1010;1.01</strong><br>
+;;;;./input/secundary/1.csv;3;jasper;100;number;string;number;<strong>NaN;NaN;jasper;;NaN;NaN</strong></p>
 <h3 id="step-4-add-boolean-whether-column-matches-based-on-shell-arguments">Step 4: add boolean whether column matches (based on shell arguments)</h3>
 <p>In this step we add a new column for each column called _matches, being a conclusive boolean field that indicates whether two fields match or not based on criteria given in shell arguments.</p>
 <p>Shell argument include threshold for every column, with default as follows<br>
@@ -89,6 +85,9 @@ string_max_different_characters=0<br>
 number_max_abs_diff=0<br>
 number_max_abs_diff=0</p>
 <p>Shell argument would look like “$COLUMNNAME_string_max_different_characters”</p>
-<p>For the given shell arguments, the output would look as follows.</p>
-<p>(Soon)</p>
+<p>For the given shell arguments(string_max_different_characters=3), the output would look as follows.<br>
+file;ID;string;number;file;ID;string;number;ID_type;string_type;number_type;ID_abs_diff;ID_rel_diff;string_left_diff;string_right_diff;number_abs_diff;number_rel_diff;<strong>ID_matches;string_matches;number_matches</strong><br>
+./input/primary/1.csv;1;jas;-1;./input/secundary/1.csv;1;jas;1;number;string;number;0;0;;;2;2;<strong>true;true;false</strong><br>
+./input/primary/1.csv;2;;-1000;./input/secundary/1.csv;2;per;10;number;string;number;0;0;per;;1010;1.01**;true;true;false**<br>
+;;;;./input/secundary/1.csv;3;jasper;100;number;string;number;NaN;NaN;jasper;;NaN;NaN;<strong>false;false;false</strong></p>
 
